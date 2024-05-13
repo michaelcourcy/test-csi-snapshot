@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-clone-from-restored-snap
+  namespace: $ANOTHER_NAMESPACE
+spec:
+  storageClassName: $STORAGE_CLASS
+  dataSource:
+    name: restored-snap
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi

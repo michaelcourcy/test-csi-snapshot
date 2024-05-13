@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: pod-on-original-pvc
+  name: pod-on-original-pvc
+  namespace: $NAMESPACE
+spec:
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  initContainers:
+  - image: alpine:3.7
+    name: init-pod-on-original-pvc
+    resources: {}
+    command: 
+    - sh
+    - -o
+    - errexit
+    - -c
+    - | 
+      echo "test data" > /data/test-file
+    volumeMounts:
+    - name: data
+      mountPath: /data
+  containers:
+  - image: alpine:3.7
+    name: pod-on-original-pvc
+    resources: {}
+    command: ["tail"]
+    args: ["-f", "/dev/null"]
+    volumeMounts:
+    - name: data
+      mountPath: /data
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: original-pvc
+status: {}

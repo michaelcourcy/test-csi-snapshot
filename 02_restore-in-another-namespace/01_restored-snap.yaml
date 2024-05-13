@@ -1,0 +1,11 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:  
+  name: restored-snap  
+  namespace: $ANOTHER_NAMESPACE
+  finalizers:
+    - snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection
+spec:
+  source:
+    volumeSnapshotContentName: restored-snapcontent
+  volumeSnapshotClassName: $VOLUME_SNAPSHOT_CLASS

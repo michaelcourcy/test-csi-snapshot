@@ -1,0 +1,16 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotContent
+metadata:
+  finalizers:
+    - snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection
+  name: restored-snapcontent  
+spec:
+  deletionPolicy: Delete
+  driver: $CSI_DRIVER
+  source:    
+    snapshotHandle: $SNAP_HANDLE
+  volumeSnapshotClassName: $VOLUME_SNAPSHOT_CLASS
+  volumeSnapshotRef:
+    kind: VolumeSnapshot
+    name: restored-snap
+    namespace: $ANOTHER_NAMESPACE    
