@@ -14,6 +14,22 @@ Those operations are tested in both the same namespace and in another namespace.
 
 If those operations failed Kasten won't be able to follow up the snapshot workflow.
 
+## OpenShift users
+
+The pods run as a non-root user (`runAsUser: 1001`). On OpenShift the default
+`restricted-v2` SCC assigns a UID from the namespace's pre-allocated range
+(`MustRunAsRange`), so a hardcoded `runAsUser: 1001` is rejected. Grant the
+built-in `nonroot-v2` SCC (it uses `MustRunAsNonRoot` for the UID and `RunAsAny`
+for the fsGroup) to the `default` service account of each namespace before
+running the tests:
+
+```
+oc adm policy add-scc-to-user nonroot-v2 -z default -n test
+oc adm policy add-scc-to-user nonroot-v2 -z default -n another-test
+```
+
+(replace `test` / `another-test` with the namespaces you set in `all.sh`).
+
 ## First test restoration of a stateful workload in the same namespace
 
 ```
