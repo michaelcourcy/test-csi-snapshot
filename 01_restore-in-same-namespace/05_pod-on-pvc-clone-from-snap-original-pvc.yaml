@@ -9,17 +9,20 @@ metadata:
 spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
+  securityContext:
+    fsGroup: 1001
   containers:
   - image: alpine:3.7
     name: pod-on-pvc-clone-from-snap-original-pvc
-    securityContext: 
+    securityContext:
       allowPrivilegeEscalation: false
-      capabilities: 
-        drop: 
+      capabilities:
+        drop:
         - "ALL"
-      runAsNonRoot: true 
-      seccompProfile: 
-        type: "RuntimeDefault" 
+      runAsNonRoot: true
+      runAsUser: 1001
+      seccompProfile:
+        type: "RuntimeDefault"
     resources: {}
     command: ["tail"]
     args: ["-f", "/dev/null"]
